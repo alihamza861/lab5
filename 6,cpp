@@ -1,0 +1,57 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+
+int readFromFile(int arr[], int& num) {
+    ifstream inFile("data.txt");
+    int count = 0;
+
+    while (inFile >> arr[count]) {
+        count++;
+    }
+
+    
+    num = arr[count - 1];
+    return count - 1; // Return size excluding 'num'
+}
+
+
+int countOccurrences(int arr[], int size, int value) {
+    int count = 0;
+    for (int i = 0; i < size; i++) {
+        if (arr[i] == value) count++;
+    }
+    return count;
+}
+
+int filterArray(int arr[], int size, int num, int result[]) {
+    int index = 0;
+    for (int i = 0; i < size; i++) {
+        int count = countOccurrences(arr, size, arr[i]);
+        if (count != num) {
+            result[index++] = arr[i];
+        }
+    }
+    return index; 
+}
+
+
+void writeToFile(int arr[], int size) {
+    ofstream outFile("output.txt");
+    for (int i = 0; i < size; i++) {
+        outFile << arr[i] << " ";
+    }
+    outFile.close();
+}
+
+
+int main() {
+    int arr[100], result[100], num;
+    int size = readFromFile(arr, num);
+    int newSize = filterArray(arr, size, num, result);
+    writeToFile(result, newSize);
+
+    cout << "Done! Check 'output.txt'" << endl;
+    return 0;
+}
